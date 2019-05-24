@@ -4,6 +4,9 @@ import numpy as np
 #list of known faces and metadata
 knownFaceEncodings = []
 knownFaceMetadata = []
+bodyCascPath = "haarcascade_upperbody.xml"
+bodyCascade = cv2.CascadeClassifier(bodyCascPath)
+
 
 def saveKnownFaces():
     with open("knownFaces.dat", "wb") as face_data_file:
@@ -72,8 +75,41 @@ def mainLoop():
 
         rgbSmallFrame = smallerFrame[:, :, ::-1]
 
-        #find all locations and face_encodings
+        """ get body loc """
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = bodyCascade.detectMultiScale(gray, 1.3, 5)
+        for (x,y,w,h) in faces:
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = frame[y:y+h, x:x+w]
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #find faces
+
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            print("(",x,",",y,")")
+            if(x < 200 and y < 200):
+                print("top left")
+            font = cv2.FONT_HERSHEY_DUPLEX
+            cv2.putText(frame, "Face", (x, y), font, 1.0, (255, 255, 255), 1)
+
+
+        #find all locations and face_encodings
         faceLocations = face_recognition.face_locations(rgbSmallFrame)
         faceEncodings = face_recognition.face_encodings(rgbSmallFrame, faceLocations)
 
