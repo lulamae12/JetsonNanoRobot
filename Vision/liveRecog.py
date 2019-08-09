@@ -57,7 +57,7 @@ def onNano():
 def mainLoop():
     if onNano():
 
-        video_capture = cv2.VideoCapture(get_jetson_gstreamer_source(), cv2.CAP_GSTREAMER)
+        video_capture = cv2.VideoCapture(0)
     else:
         video_capture = cv2.VideoCapture(0)
 
@@ -71,7 +71,7 @@ def mainLoop():
 
         #resize frame for faster recog
 
-        smallerFrame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25)
+        smallerFrame = cv2.resize(frame, (0,0), fx=0.50, fy=0.50)
 
         rgbSmallFrame = smallerFrame[:, :, ::-1]
 
